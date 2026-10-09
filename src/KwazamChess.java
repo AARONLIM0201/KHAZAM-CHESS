@@ -156,7 +156,7 @@ class LoadSaveGame
     private TurnManager turnManager;
     private GameStatus gameStatus;
 
-    private String filePath = "save.txt";   // file path to save game
+    private String filePath = "data/save.txt";   // file path to save game
     private File savefile = new File(filePath);
 
     // Constructor to initialise LoadSaveGame object
@@ -584,7 +584,8 @@ abstract class ChessPiece
         // if its current colour's turn, use normal image.
         // else, use the inverted image.
         return isTurn
-            ? colour + "_" + type + ".png" : "Invert_" + colour + "_" + type + ".png";
+            ? "assets/images/" + colour + "_" + type + ".png"
+            : "assets/images/Invert_" + colour + "_" + type + ".png";
     }
 
     public List<Position> getPossibleMovesList() { return possibleMoves; }
@@ -1031,7 +1032,7 @@ class MainPanelView extends JPanel
         gbc.insets = new Insets(80, 10, 0, 10); // Padding between buttons
 
         //Game Logo image
-        ImageIcon icon = new ImageIcon("KwazamChessLogo.png");
+        ImageIcon icon = new ImageIcon("assets/images/KwazamChessLogo.png");
 
         // Set the image on a JLabel
         JLabel logo = new JLabel(icon);
@@ -1269,7 +1270,7 @@ class GamePanelView extends JPanel
     // Done by: Teh Yu Qian
     public ImageIcon loadImage(String path, int width, int height) 
     {
-        Image image = new ImageIcon(this.getClass().getResource(path)).getImage();
+        Image image = new ImageIcon(path).getImage();
         Image scaledImage = image.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImage);
     }
@@ -1294,11 +1295,11 @@ class GamePanelView extends JPanel
                         {
                             if (piece.isTurn() == true)
                             {
-                                pieceButtons[row][col].setIcon(new ImageIcon("Invert_" + piece.getColour() + "_" + piece.getType() + ".png"));
+                                pieceButtons[row][col].setIcon(loadImage("assets/images/Invert_" + piece.getColour() + "_" + piece.getType() + ".png", 60, 65));
                             }
                             else
                             {
-                                pieceButtons[row][col].setIcon(new ImageIcon(piece.getColour() + "_" + piece.getType() + ".png"));
+                                pieceButtons[row][col].setIcon(loadImage("assets/images/" + piece.getColour() + "_" + piece.getType() + ".png", 60, 65));
                             }
                         }
                     }
@@ -1720,7 +1721,7 @@ class MainPanelController
 
     public void loadSavedGame()
     {
-        loadSaveGame.loadGame("save.txt");  // Load game from save file
+        loadSaveGame.loadGame("data/save.txt");  // Load game from save file
         GamePanelController gamePanelController = new GamePanelController(chessboard, turnManager, gameStatus, pieceMovement, frame, frame.getGamePanel());   // Create new game panel controller to update game panel after loaded
         frame.showCard(frame.getFrame(), "Start Game");   // Show game panel
         mainPanel.getLoadSaveDialog().setVisible(false);    // Hide load save dialog
